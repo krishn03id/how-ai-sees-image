@@ -108,7 +108,9 @@ class HowAISees(Scene):
         self.play(LaggedStart(*[FadeIn(c, scale=0.5) for c in grid],
                               lag_ratio=0.01, run_time=2.0))
         self.wait(1.0)
-        self.play(FadeOut(VGroup(photo, cap, grid, gcap)))
+        # photo is an ImageMobject (an Mobject, not a VMobject), so it can't go
+        # in a VGroup -- FadeOut each piece separately instead.
+        self.play(FadeOut(photo), FadeOut(cap), FadeOut(grid), FadeOut(gcap))
 
         # part B: zoom -- each cell is a number
         crop = img[2:7, 2:7]
