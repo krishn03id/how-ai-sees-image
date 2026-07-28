@@ -43,8 +43,12 @@ jobs:
           xvfb-run -a -s "-screen 0 1920x1080x24" \
             manimgl scene.py HowAISees -w -m
           echo "--- produced mp4 files ---"
-          find media -name '*.mp4' -print
-          find media -name '*.mp4' -print -quit | xargs -I{} cp {} out/how_ai_sees.mp4
+          find . -name '*.mp4' -print
+          # ManimGL v1.7.x writes to ./videos/ (older versions used ./media/videos/)
+          vid=$(find . -name 'HowAISees.mp4' -print -quit)
+          test -n "$vid" || { echo "no mp4 produced"; exit 1; }
+          echo "found video: $vid"
+          cp "$vid" out/how_ai_sees.mp4
           ls -la out
 
       - name: Upload video artifact
